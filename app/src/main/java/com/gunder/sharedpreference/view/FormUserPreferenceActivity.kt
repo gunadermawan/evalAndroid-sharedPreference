@@ -3,6 +3,7 @@ package com.gunder.sharedpreference.view
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
@@ -20,6 +21,35 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityFormUserPreferenceBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+
+        userModel = intent.getParcelableExtra<UserModel>("USER") as UserModel
+        val formType = intent.getIntExtra(EXTRA_FORM_TYPE, 0)
+
+        var actionBarTitle = ""
+        var btnTitle = ""
+        when (formType) {
+            TYPE_ADD -> {
+                actionBarTitle = "Create new"
+                btnTitle = "Save"
+            }
+            TYPE_EDIT -> {
+                actionBarTitle = "Edit"
+                btnTitle = "Edit"
+                showPreferenceForm()
+            }
+        }
+    }
+
+    private fun showPreferenceForm() {
+        binding.edtName.setText(userModel.name)
+        binding.edtEmail.setText(userModel.email)
+        binding.edtPhone.setText(userModel.phoneNumber)
+        binding.edtAge.setText(userModel.age)
+        if (userModel.isLove) {
+            binding.rbYes.isChecked = true
+        } else {
+            binding.rbNo.isChecked = true
+        }
     }
 
     override fun onClick(view: View?) {
@@ -39,7 +69,7 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
                 return
             }
             if (!isValidEmail(email)) {
-                binding.edtName.error = FIELD_REQUIRED
+                binding.edtName.error = FIELD_IS_NOT_VALID
                 return
             }
             if (age.isEmpty()) {
@@ -76,11 +106,17 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
         userModel.isLove = loveMu
         userPreference.setUser(userModel)
         Toast.makeText(this, "Data saved!", Toast.LENGTH_SHORT).show()
-
     }
 
     private fun isValidEmail(email: CharSequence): Boolean {
         return android.util.Patterns.EMAIL_ADDRESS.matcher(email).matches()
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if (item.itemId == android.R.id.home) {
+            finish()
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 
@@ -88,8 +124,8 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
         const val EXTRA_FORM_TYPE = "extra_form_type"
         const val EXTRA_RESULT = "extra_result"
         const val EXTRA_CODE = 101
-        const val EXTRA_ADD = 1
-        const val EXTRA_EDIT = 2
+        const val TYPE_ADD = 1
+        const val TYPE_EDIT = 2
         const val FIELD_REQUIRED = "field_is_not_allowed_empty"
         const val FIELD_DIGIT_ONLY = "only_digit_only"
         const val FIELD_IS_NOT_VALID = "email_is_not_valid"
