@@ -13,8 +13,10 @@ internal class UserPreference(context: Context) {
         private const val LOVE_MU = "islove"
     }
 
+    //    create sharedPreference
     private val preference = context.getSharedPreferences(PREFES_NAME, Context.MODE_PRIVATE)
 
+    //    this method use to create user data
     fun setUser(value: UserModel) {
         val editor = preference.edit()
         editor.putString(NAME, value.name)
@@ -25,6 +27,7 @@ internal class UserPreference(context: Context) {
         editor.apply()
     }
 
+    //    this method use to read/get user data
     fun getUser(): UserModel {
         val model = UserModel()
         model.name = preference.getString(NAME, "")
