@@ -21,6 +21,7 @@ class FormUserPreferenceActivity : AppCompatActivity(), View.OnClickListener {
         binding = ActivityFormUserPreferenceBinding.inflate(layoutInflater)
         super.onCreate(savedInstanceState)
         setContentView(binding.root)
+        binding.btnSave.setOnClickListener(this)
 
         userModel = intent.getParcelableExtra<UserModel>("USER") as UserModel
         val formType = intent.getIntExtra(EXTRA_FORM_TYPE, 0)

@@ -36,7 +36,6 @@ internal class UserPreference(context: Context) {
         model.phoneNumber = preference.getString(PHONE_NUMBER, "")
         model.isLove = preference.getBoolean(LOVE_MU, false)
         return model
-
     }
 
 }
